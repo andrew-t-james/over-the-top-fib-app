@@ -36,3 +36,38 @@ const redisClient = redis.createClient({
 });
 
 const redisPublisher = redisClient.duplicate();
+
+// Express route handlers
+
+app.get('/', (req, res) => {
+  res.send('Hi');
+});
+
+app.get('/values/all', async (req, res) => {
+  const values = await pgClient.query('SELECT * FROM values');
+  res.send(values.rows);
+});
+
+app.get('/values/all', async (req, res) => {
+  // eslint-disable-next-line handle-callback-err
+  redisClient.hgetall('values', (error, values) => {
+    res.send('values');
+  });
+});
+
+app.post('/values', async (req, res) => {
+  const index = req.body.value;
+  // eslint-disable-next-line radix
+  if (parseInt(index) > 40) {
+    return res.status(422).send('Index to high');
+  }
+
+  redisClient.hset('values', index, 'Nothing Yet');
+  redisPublisher.publish('insert', index);
+  pgClient.query('INSERT INTO values(number) VALUES $1', [index]);
+  res.send({ working: true });
+});
+
+app.listen(5000, () => {
+  console.log('Listening on port:5000');
+});
