@@ -19,7 +19,8 @@ function Fib() {
   useEffect(() => {
     let current = true;
 
-    if(current) {
+    if (current) {
+      getIndexes()
     }
 
     return () => current = false;
@@ -28,7 +29,7 @@ function Fib() {
   function renderValues() {
     const entries = [];
 
-    for(let key in values) {
+    for (let key in values) {
       entries.push(
         <Fragment key={key}>
           For index {key} I calculated {values[key]}
@@ -51,7 +52,7 @@ function Fib() {
     <div>
       <form>
         <label htmlFor="">Enter your index</label>
-        <input onChange={e => setIndex(e.target.value)} type="text"/>
+        <input onChange={e => setIndex(e.target.value)} type="text" />
         <button>submit</button>
       </form>
       <h3>Indexes I have seen</h3>
