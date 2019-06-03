@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 // Postgres config
 const pgClient = new Pool({
   user: keys.pgUser,
-  hose: keys.pgHost,
+  host: keys.pgHost,
   database: keys.pgDatabase,
   password: keys.pgPassword,
   port: keys.pgPort
