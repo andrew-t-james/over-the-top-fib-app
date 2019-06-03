@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 // Express set up
 const express = require('express');
-const bodyParser = require('body-parse');
+const bodyParser = require('body-parser');
 const cors = require('cors');
 const { Pool } = require('pg');
 const redis = require('redis');
