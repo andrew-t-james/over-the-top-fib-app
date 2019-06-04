@@ -44,14 +44,14 @@ app.get('/', (req, res) => {
 });
 
 app.get('/values/all', async (req, res) => {
-  const values = await pgClient.query('SELECT * FROM values');
+  const values = await pgClient.query('SELECT * from values');
   res.send(values.rows);
 });
 
-app.get('/values/all', async (req, res) => {
+app.get('/values/current', async (req, res) => {
   // eslint-disable-next-line handle-callback-err
   redisClient.hgetall('values', (error, values) => {
-    res.send('values');
+    res.send(values);
   });
 });
 
@@ -62,9 +62,9 @@ app.post('/values', async (req, res) => {
     return res.status(422).send('Index to high');
   }
 
-  redisClient.hset('values', index, 'Nothing Yet');
+  redisClient.hset('values', index, 'Nothing yet!');
   redisPublisher.publish('insert', index);
-  pgClient.query('INSERT INTO values(number) VALUES $1', [index]);
+  pgClient.query('INSERT INTO values(number) VALUES($1)', [index]);
   res.send({ working: true });
 });
 
