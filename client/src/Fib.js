@@ -2,12 +2,13 @@ import React, { Fragment, useState, useEffect } from 'react'
 import axios from 'axios'
 
 function Fib() {
-  const [seenIndexes, setSeenIndexes] = useState(null)
-  const [values, setValues] = useState(null)
+  const [seenIndexes, setSeenIndexes] = useState([])
+  const [values, setValues] = useState({})
   const [index, setIndex] = useState('')
 
   async function getValues() {
     const values = await axios.get('/api/values/current')
+    console.log('values:', values)
     setValues(values.data)
   }
 
@@ -21,6 +22,7 @@ function Fib() {
 
     if (current) {
       getIndexes()
+      getValues()
     }
 
     return () => current = false;
@@ -33,11 +35,16 @@ function Fib() {
       entries.push(
         <Fragment key={key}>
           For index {key} I calculated {values[key]}
-        </Fragment>
+          <br />
+        </Fragment >
       )
     }
 
     return entries
+  }
+
+  function renderIndexes() {
+    return seenIndexes.map(({ number }) => number).join(', ');
   }
 
   async function handleSubmit(event) {
@@ -50,14 +57,15 @@ function Fib() {
 
   return (
     <div>
-      <form>
+      <form onSubmit={handleSubmit}>
         <label htmlFor="">Enter your index</label>
-        <input onChange={e => setIndex(e.target.value)} type="text" />
+        <input onChange={e => setIndex(e.target.value)} value={index} type="text" />
         <button>submit</button>
       </form>
       <h3>Indexes I have seen</h3>
-
+      {renderIndexes()}
       <h3>Values I have seen</h3>
+      {renderValues()}
     </div>
   )
 }
