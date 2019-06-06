@@ -42,4 +42,4 @@ services:
       context: ./worker
     volumes:
       - /app/node_modules
-      - ./client:/app
+      - ./worker:/app
