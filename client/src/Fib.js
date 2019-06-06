@@ -8,7 +8,6 @@ function Fib() {
 
   async function getValues() {
     const values = await axios.get('/api/values/current')
-    console.log('values:', values)
     setValues(values.data)
   }
 
@@ -21,8 +20,8 @@ function Fib() {
     let current = true;
 
     if (current) {
-      getIndexes()
       getValues()
+      getIndexes()
     }
 
     return () => current = false;
