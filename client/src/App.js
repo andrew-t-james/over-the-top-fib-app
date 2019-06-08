@@ -1,9 +1,9 @@
-import React from 'react';
-import logo from './logo.svg';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
-import Fib from './Fib'
-import SecondaryPage from './SecondaryPage'
-import './App.css';
+import React from "react";
+import logo from "./logo.svg";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import Fib from "./Fib";
+import SecondaryPage from "./SecondaryPage";
+import "./App.css";
 
 function App() {
   return (

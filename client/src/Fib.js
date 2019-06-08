@@ -1,31 +1,31 @@
-import React, { Fragment, useState, useEffect } from 'react'
-import axios from 'axios'
+import React, { Fragment, useState, useEffect } from "react";
+import axios from "axios";
 
 function Fib() {
-  const [seenIndexes, setSeenIndexes] = useState([])
-  const [values, setValues] = useState({})
-  const [index, setIndex] = useState('')
+  const [seenIndexes, setSeenIndexes] = useState([]);
+  const [values, setValues] = useState({});
+  const [index, setIndex] = useState("");
 
   async function getValues() {
-    const values = await axios.get('/api/values/current')
-    setValues(values.data)
+    const values = await axios.get("/api/values/current");
+    setValues(values.data);
   }
 
   async function getIndexes() {
-    const seenIndexes = await axios.get('/api/values/all')
-    setSeenIndexes(seenIndexes.data)
+    const seenIndexes = await axios.get("/api/values/all");
+    setSeenIndexes(seenIndexes.data);
   }
 
   useEffect(() => {
     let current = true;
 
     if (current) {
-      getValues()
-      getIndexes()
+      getValues();
+      getIndexes();
     }
 
-    return () => current = false;
-  }, [])
+    return () => (current = false);
+  }, []);
 
   function renderValues() {
     const entries = [];
@@ -35,30 +35,34 @@ function Fib() {
         <Fragment key={key}>
           For index {key} I calculated {values[key]}
           <br />
-        </Fragment >
-      )
+        </Fragment>
+      );
     }
 
-    return entries
+    return entries;
   }
 
   function renderIndexes() {
-    return seenIndexes.map(({ number }) => number).join(', ');
+    return seenIndexes.map(({ number }) => number).join(", ");
   }
 
   async function handleSubmit(event) {
-    event.preventDefault()
-    await axios.post('/api/values', {
+    event.preventDefault();
+    await axios.post("/api/values", {
       index
-    })
-    setIndex('')
+    });
+    setIndex("");
   }
 
   return (
     <div>
       <form onSubmit={handleSubmit}>
         <label htmlFor="">Enter your index</label>
-        <input onChange={e => setIndex(e.target.value)} value={index} type="text" />
+        <input
+          onChange={e => setIndex(e.target.value)}
+          value={index}
+          type="text"
+        />
         <button>submit</button>
       </form>
       <h3>Indexes I have seen</h3>
@@ -66,7 +70,7 @@ function Fib() {
       <h3>Values I have seen</h3>
       {renderValues()}
     </div>
-  )
+  );
 }
 
-export default Fib
+export default Fib;
