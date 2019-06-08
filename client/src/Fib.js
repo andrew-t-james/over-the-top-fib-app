@@ -25,7 +25,7 @@ function Fib() {
     }
 
     return () => (current = false);
-  }, []);
+  }, [values, index]);
 
   function renderValues() {
     const entries = [];
