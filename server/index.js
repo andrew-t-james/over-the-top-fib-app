@@ -1,12 +1,12 @@
 /* eslint-disable prefer-destructuring */
 
 // Express App Setup
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const redis = require('redis');
-const { Pool } = require('pg');
-const keys = require('./keys');
+const express = require("express");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const redis = require("redis");
+const { Pool } = require("pg");
+const keys = require("./keys");
 
 const app = express();
 app.use(cors());
@@ -21,10 +21,10 @@ const pgClient = new Pool({
   port: keys.pgPort
 });
 
-pgClient.on('error', () => console.log('Pg Client lost connection'));
+pgClient.on("error", () => console.log("Pg Client lost connection"));
 
 pgClient
-  .query('CREATE TABLE IF NOT EXISTS values (number INT)')
+  .query("CREATE TABLE IF NOT EXISTS values (number INT)")
   .catch(error => console.log(error));
 
 // Redis config
@@ -38,35 +38,35 @@ const redisPublisher = redisClient.duplicate();
 
 // Express route handlers
 
-app.get('/', (req, res) => {
-  res.send('Hi');
+app.get("/", (req, res) => {
+  res.send("Hi");
 });
 
-app.get('/values/all', async (req, res) => {
-  const values = await pgClient.query('SELECT * from values');
+app.get("/values/all", async (req, res) => {
+  const values = await pgClient.query("SELECT * from values");
   res.send(values.rows);
 });
 
-app.get('/values/current', async (req, res) => {
+app.get("/values/current", async (req, res) => {
   // eslint-disable-next-line handle-callback-err
-  redisClient.hgetall('values', (error, values) => {
+  redisClient.hgetall("values", (error, values) => {
     res.send(values);
   });
 });
 
-app.post('/values', async (req, res) => {
+app.post("/values", async (req, res) => {
   const index = req.body.index;
   // eslint-disable-next-line radix
   if (parseInt(index) > 40) {
-    return res.status(422).send('Index too high');
+    return res.status(422).send("Index too high");
   }
 
-  redisClient.hset('values', index, 'Nothing yet!');
-  redisPublisher.publish('insert', index);
-  pgClient.query('INSERT INTO values(number) VALUES($1)', [index]);
+  redisClient.hset("values", index, "Nothing yet!");
+  redisPublisher.publish("insert", index);
+  pgClient.query("INSERT INTO values(number) VALUES($1)", [index]);
   res.send({ working: true });
 });
 
 app.listen(5000, () => {
-  console.log('Listening on port:5000');
+  console.log("Listening on port:5000");
 });

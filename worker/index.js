@@ -1,5 +1,5 @@
-const redis = require('redis');
-const keys = require('./keys');
+const redis = require("redis");
+const keys = require("./keys");
 
 const redisClient = redis.createClient({
   host: keys.redisHost,
@@ -13,8 +13,8 @@ function fib(index) {
   return fib(index - 1) + fib(index - 2);
 }
 
-sub.on('message', (channel, message) => {
+sub.on("message", (channel, message) => {
   // eslint-disable-next-line radix
-  redisClient.hset('values', message, fib(parseInt(message)));
+  redisClient.hset("values", message, fib(parseInt(message)));
 });
-sub.subscribe('insert');
+sub.subscribe("insert");
