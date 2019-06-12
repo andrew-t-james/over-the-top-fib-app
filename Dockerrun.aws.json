@@ -6,6 +6,34 @@
       "image": "andrewtjames/multi-client",
       "hostname": "client",
       "essential": false
+    },
+    {
+      "name": "server",
+      "image": "andrewtjames/multi-server",
+      "hostname": "api",
+      "essential": false
+    },
+    {
+      "name": "worker",
+      "image": "andrewtjames/multi-worker",
+      "hostname": "worker",
+      "essential": false
+    },
+    {
+      "name": "nginx",
+      "image": "andrewtjames/multi-nginx",
+      "hostname": "nginx",
+      "essential": true,
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "containerPort": 80
+        }
+      ],
+      "links": [
+        "client",
+        "server"
+      ]
     }
   ]
 }
